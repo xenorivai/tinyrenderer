@@ -3,7 +3,6 @@
 #include "model.h"
 #include "geometry.h"
 #include "triangle.h"
-#include "line.h"
 
 
 const TGAColor white = TGAColor(255, 255, 255, 255);
@@ -124,4 +123,3 @@ int main(int argc, char** argv) {
 
 	return 0;
 }
-
