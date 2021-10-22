@@ -78,7 +78,7 @@ void line(vec2i p0, vec2i p1, TGAImage &image, TGAColor color){
 	line(p0.x,p0.y,p1.x,p1.y,image,color);
 }
 
-vec3f barycentric(vec3i* pts, vec3i P) {
+vec3f barycentric(vec3f* pts, vec3i P) {
 	vec3f bc = cross(	vec3f(pts[2][0] - pts[0][0], pts[1][0] - pts[0][0], pts[0][0] - P[0]),
 						vec3f(pts[2][1] - pts[0][1], pts[1][1] - pts[0][1], pts[0][1] - P[1])
 					);
@@ -88,20 +88,21 @@ vec3f barycentric(vec3i* pts, vec3i P) {
 }
 
 
-void untex_triangle(vec3i* pts, double *zbuffer, TGAImage& image, TGAColor color) {
+
+void untex_triangle(vec3f* pts, double *zbuffer, TGAImage& image, TGAColor color) {
 
 	const int width = image.get_width();
 	// const int height = image.get_height();
 
-	vec2i bboxmin( std::numeric_limits<int>::max(),  std::numeric_limits<int>::max());
-	vec2i bboxmax(-std::numeric_limits<int>::max(), -std::numeric_limits<int>::max());
-	vec2i extra(image.get_width() - 1, image.get_height() - 1);
+	vec2f bboxmin( std::numeric_limits<float>::max(),  std::numeric_limits<float>::max());
+	vec2f bboxmax(-std::numeric_limits<float>::max(), -std::numeric_limits<float>::max());
+	vec2f extra(image.get_width() - 1, image.get_height() - 1);
 
 
 	//Calculating the bounding box
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 2; j++) {
-			bboxmin[j] = std::max(0		  , std::min(bboxmin[j], pts[i][j]));
+			bboxmin[j] = std::max(0.0		  , std::min(bboxmin[j], pts[i][j]));
 			bboxmax[j] = std::min(extra[j], std::max(bboxmax[j], pts[i][j]));
 		}
 	}
@@ -145,21 +146,24 @@ void untex_triangle(vec3i* pts, double *zbuffer, TGAImage& image, TGAColor color
 	}
 }
 
+
+
+
 //Input array of vertex coords, array of uv coords , model and rest
-void triangle(vec3i *pts, vec2f *uvs, double *zbuffer, TGAImage &image, Model *model){
+void triangle(vec3f *pts, vec2f *uvs, double *zbuffer, TGAImage &image, Model *model){
 	
 	const int width = image.get_width();
 	// const int height = image.get_height();
 
-	vec2i bboxmin(std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
-    vec2i bboxmax(std::numeric_limits<int>::min(), std::numeric_limits<int>::min());
-	vec2i extra(image.get_width() - 1, image.get_height() - 1);
+	vec2f bboxmin(std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
+    vec2f bboxmax(std::numeric_limits<float>::min(), std::numeric_limits<float>::min());
+	vec2f extra(image.get_width() - 1, image.get_height() - 1);
 
 
 	//Calculating the bounding box
 	for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 2; j++) {
-			bboxmin[j] = std::max(0		  , std::min(bboxmin[j], pts[i][j]));
+			bboxmin[j] = std::max(0.0		  , std::min(bboxmin[j], pts[i][j]));
 			bboxmax[j] = std::min(extra[j], std::max(bboxmax[j], pts[i][j]));
 		}
     }
