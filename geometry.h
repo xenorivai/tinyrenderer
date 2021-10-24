@@ -357,3 +357,11 @@ inline T clamp(T value, T minimum, T maximum)
 {
     return std::min(std::max(value, minimum), maximum);
 }
+
+inline void display_vec(vec3f &v){
+	std::cout << v.x << " " << v.y << " " << v.z << std::endl;
+}
+
+inline void display_vec(vec4f &v){
+	std::cout << v[0] << " " << v[1] << " " << v[2] << " " << v[3] << std::endl;
+}
