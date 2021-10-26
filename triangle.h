@@ -87,8 +87,6 @@ vec3f barycentric(vec3f* pts, vec3i P) {
 	return vec3f(1.0f - (bc.x + bc.y) / bc.z, bc.y / bc.z, bc.x / bc.z);
 }
 
-
-
 void untex_triangle(vec3f* pts, double *zbuffer, TGAImage& image, TGAColor color) {
 
 	const int width = image.get_width();
@@ -146,9 +144,6 @@ void untex_triangle(vec3f* pts, double *zbuffer, TGAImage& image, TGAColor color
 	}
 }
 
-
-
-
 //Input array of vertex coords, array of uv coords , model and rest
 void triangle(vec3f *pts, vec2f *uvs, double *zbuffer, TGAImage &image, Model *model){
 	
@@ -189,8 +184,8 @@ void triangle(vec3f *pts, vec2f *uvs, double *zbuffer, TGAImage &image, Model *m
 			if (zbuffer[int(P.x + P.y * width)] < P.z) {
 				zbuffer[int(P.x + P.y * width)] = P.z;
 
-				vec2f uv{0,0};
 				// uv coords of the point P is calculated as sum of products : of uv-coords of triangle's vertices and coresponding bary_coords
+				vec2f uv{0,0};
 				for(int i = 0 ; i < 3 ; i++){
 					uv.x += uvs[i].x * bc_screen[i];
 					uv.y += uvs[i].y * bc_screen[i];

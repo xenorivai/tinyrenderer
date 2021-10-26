@@ -15,11 +15,7 @@ const int width = 1200;
 const int height = 1200;
 const int depth = 255;
 
-
-// vec3f cam(0.8, 0.7, 5.0);
-// vec3f target(9.0,0.15,1.5);
-
-vec3f cam(0,0,-5);
+vec3f cam(0,0,10);
 vec3f target(0,0,0);
 
 Model* model = NULL;
@@ -78,7 +74,7 @@ void render(vec3f light_dir, double *zbuffer, Model *model, TGAImage &image) {
 	mat4 view_port = viewport(0,0,width,height,depth);
 	// mat4 view_port = viewport(width/8,height/8,width*3/4,height*3/4);
 
-	mat4 proj = projection(30.0f,static_cast<float>(width/height),-1.0f,-10.0f);
+	mat4 proj = projection(15.0f,static_cast<float>(width/height),-1.f,-10.f);
 	mat4 model_view = lookat(cam,target,vec3f(0,1,0));
 
 	for (size_t i = 0; i < model->nfaces(); i++) {
@@ -106,7 +102,7 @@ void render(vec3f light_dir, double *zbuffer, Model *model, TGAImage &image) {
 			screen_coords[j] = embed<3>(tmp);
 			screen_coords[j].z *= -1.0f; // z-buffer doesnt work if I don't do this, probably due to how I've implemented the projection matrix
 			
-			uv_coords[j] = model->uv(i,j);			
+			uv_coords[j] = model->uv(i,j);
 		}
 
 		//calculate normal to triangle
@@ -114,11 +110,12 @@ void render(vec3f light_dir, double *zbuffer, Model *model, TGAImage &image) {
 		n.normalize();
 
 		//Lmabertian lighting
-		double intensity = dot(n, light_dir);
+		double ity = dot(n, light_dir);
 
-		if (intensity > 0) {
+		if (ity > 0) {
 			triangle(screen_coords,uv_coords,zbuffer,image,model);			
 		}
+
 	}
 
 	TGAImage depth(width, height, TGAImage::GRAYSCALE);
@@ -151,6 +148,7 @@ int main(int argc, char** argv) {
 	render(light_dir,zbuffer,model,image);
 
 	image.write_tga_file("output.tga");
+
 	delete model;
 
 	return 0;
