@@ -18,6 +18,7 @@ $(OBJECTS): %.o: %.cpp
 
 clean:
 	-rm -f $(OBJECTS)
+	-rm -f *.o
 	-rm -f $(TARGET)
 	-rm -f *.tga
 

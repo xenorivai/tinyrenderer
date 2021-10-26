@@ -121,7 +121,7 @@ mat4 lookat(vec3f camPos, vec3f targetPos,vec3f globalUp = vec3f(0.0,1.0,0.0)){
 	return R*T;
 }
 
-mat4 projection(float l, float r, float b, float t, float n, float f)
+mat4 perspective(float l, float r, float b, float t, float n, float f)
 {
     mat4 P = mat4::identity(); // Persepective transform to transform frustum into viewing cube , includes the transformation to transform viewing cube to bi-unit cube, for more details checkout http://www.songho.ca/opengl/gl_projectionmatrix.html
 
@@ -140,12 +140,18 @@ mat4 projection(float l, float r, float b, float t, float n, float f)
     return P;
 }
 
-mat4 projection(float v_fov, float aspectRatio, float front, float back){
+mat4 perspective(float v_fov, float aspectRatio, float front, float back){
 	float theta = v_fov*DEG2RAD;
 	float tangent = tanf(theta/2);		   		// tangent of half v_fov
     float height = front * tangent;             // half height of near plane
     float width = height * aspectRatio;         // half width of near plane
 
-	return projection(-width, width, -height, height, front, back);
+	return perspective(-width, width, -height, height, front, back);
 
+}
+
+void perspective_division(vec4f &v){
+	for(int i = 0 ; i < 4 ; i++){
+		v[i] = v[i] / v[3];	
+	} 
 }
