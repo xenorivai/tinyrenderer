@@ -1,9 +1,6 @@
 #include <iostream>
 #include "tgaimage.h"
-#include "model.h"
-#include "geometry.h"
 #include "triangle.h"
-#include "transform.h"
 #include "gl.h"
 #include "shader.h"
 
@@ -16,7 +13,7 @@ const int width = 1200;
 const int height = 1200;
 const int depth = 255;
 
-vec3f cam(2,2,9);
+vec3f cam(1.3,1,6);
 vec3f target(0,0,0);
 
 Model* model = NULL;
@@ -114,10 +111,10 @@ void render(vec3f light_dir, double *zbuffer, Model *model, TGAImage &image) {
 
 void shader_render(vec3f light_dir, double *zbuffer, Model *model, TGAImage &image){
 
-	Shader pshader;
+	PhongShader pshader;
 
 	pshader.u_ModelView		= lookat(cam,target,vec3f(0,1,0));
-	pshader.u_Perspective	= perspective(15.0f,static_cast<float>(width/height),-1.f,-10.f);
+	pshader.u_Perspective	= perspective(20.0f,static_cast<float>(width/height),-1.f,-10.f);
 	pshader.u_Viewport		= viewport(0,0,width,height,depth);
 	pshader.u_lightDir		= light_dir;
 
@@ -137,7 +134,7 @@ int main(int argc, char** argv) {
 		model = new Model(argv[1]);
 	}
 	else {
-		model = new Model("obj/african_head.obj",true,true,false);		
+		model = new Model("obj/diablo3_pose.obj",true,true,false);		
 	}
 
 	INIT_ZBUF();
@@ -148,7 +145,6 @@ int main(int argc, char** argv) {
 
 	// untex_render(light_dir,zbuffer,model,image);
 	// render(light_dir,zbuffer,model,image);
-
 
 	shader_render(light_dir,zbuffer,model,image);
 

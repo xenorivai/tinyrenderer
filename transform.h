@@ -151,6 +151,7 @@ mat4 perspective(float v_fov, float aspectRatio, float front, float back){
 }
 
 void perspective_division(vec4f &v){
+	assert(v[3] !=0);
 	for(int i = 0 ; i < 4 ; i++){
 		v[i] = v[i] / v[3];	
 	} 

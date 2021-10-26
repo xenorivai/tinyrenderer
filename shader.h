@@ -113,8 +113,6 @@ struct PhongShader : public IShader{
 struct Shader : public IShader{
 	mat<2,3> varying_uv;
 	vec3f u_lightDir;
-	mat4 u_MIT = (u_Perspective * u_ModelView).invert_transpose();
-
 	virtual ~Shader(){}
 
 	virtual vec3f vertex(Model *model,int iface,int nthvert){
@@ -130,20 +128,15 @@ struct Shader : public IShader{
 
 	virtual bool fragment(Model *model, vec3f bar, TGAColor &color){
 		vec2f uv = varying_uv*bar;
-		auto tmp = u_MIT*embed<4>(model->normal(uv));
 
-		// std::cout<<"Before persp div : ";
-		// display_vec(tmp);
+		auto tmp = ((u_Perspective*u_ModelView).invert_transpose())*embed<4>(model->normal(uv));
 
 		perspective_division(tmp);
 		
-		// std::cout<<"After persp div : ";
-		// display_vec(tmp);
-		
 		vec3f n = embed<3>(tmp).normalize();
-		// vec3f l = embed<3>(u_Perspective*u_ModelView*embed<4>(u_lightDir)).normalize();
-		double intensity = dot(n,u_lightDir);
-		// std::cout<<"\n"<<intensity<<"\n";
+		vec3f l = embed<3>(u_Perspective*u_ModelView*embed<4>(u_lightDir)).normalize();
+
+		double intensity = dot(n,l);
 		if(intensity > 0.0){
 			color = model->diffuse(uv)*intensity;
 			return false;
